@@ -1,0 +1,202 @@
+===========================================================
+CELIA Corporation
+Documento Fictício de Segurança da Informação e Compliance
+Classificação: INTERNO
+Versão: 1.0
+Data: 2026-05-20
+===========================================================
+
+[SEÇÃO 1 - VISÃO GERAL]
+
+A CELIA Corporation mantém políticas internas de segurança da informação,
+monitoramento contínuo de infraestrutura e conformidade regulatória para
+garantir a integridade, confidencialidade e disponibilidade de seus ativos digitais.
+
+Este documento contém informações totalmente fictícias destinadas a:
+- testes de ingestão em base vetorial;
+- benchmarks de embeddings;
+- validação de sistemas RAG;
+- simulação de documentos corporativos.
+
+Nenhuma informação presente neste arquivo corresponde a ambientes reais.
+
+-----------------------------------------------------------
+[SEÇÃO 2 - INVENTÁRIO DE APLICAÇÕES]
+-----------------------------------------------------------
+
+Aplicação: celia-auth-api
+Tipo: API REST
+Ambiente: Produção
+Linguagem: GoLang 1.23
+Cluster Kubernetes: k8s-prod-sa-east-01
+Namespace: auth-services
+TLS: Habilitado (TLS 1.3)
+WAF: Ativado
+Autenticação: OAuth2 + JWT
+Última Auditoria: 2026-04-12
+Status de Compliance: APROVADO
+
+Aplicação: celia-finance-web
+Tipo: Frontend Web
+Framework: React 20
+CDN: CloudFront
+Proteção DDoS: Ativa
+Headers de Segurança:
+- CSP habilitado
+- HSTS habilitado
+- X-Frame-Options DENY
+
+Aplicação: celia-internal-admin
+Tipo: Painel Administrativo
+Acesso: VPN corporativa obrigatória
+MFA: Obrigatório
+Logs centralizados: Sim
+SIEM Integrado: Sim
+
+-----------------------------------------------------------
+[SEÇÃO 3 - INFRAESTRUTURA DE SERVIDORES]
+-----------------------------------------------------------
+
+Servidor: srv-prd-api-01
+Sistema Operacional: Ubuntu Server 26.04 LTS
+IP Interno: 10.10.15.21
+Hardening CIS: Aplicado
+EDR: Ativo
+Antivírus: SentinelOne
+Portas Permitidas:
+- 443/tcp
+- 22/tcp (restrito)
+
+Servidor: srv-prd-db-01
+Banco de Dados: PostgreSQL 17
+Criptografia em repouso: AES-256
+Backups:
+- Diário incremental
+- Semanal completo
+Retenção: 90 dias
+Replicação: Multi-Zona
+
+Servidor: srv-monitor-01
+Ferramentas:
+- Prometheus
+- Grafana
+- Loki
+- AlertManager
+
+-----------------------------------------------------------
+[SEÇÃO 4 - CONTROLES DE SEGURANÇA]
+-----------------------------------------------------------
+
+Controles implementados:
+- MFA obrigatório
+- Gestão de vulnerabilidades contínua
+- Rotação automática de segredos
+- Segmentação de rede
+- IAM baseado em menor privilégio
+- Criptografia TLS ponta a ponta
+- Proteção contra brute force
+- Rate limiting em APIs
+
+Tempo médio de correção de vulnerabilidades críticas:
+- SLA: 24 horas
+
+Ferramentas utilizadas:
+- CrowdStrike Falcon
+- Wiz Security
+- Prisma Cloud
+- SonarQube
+- Snyk
+
+-----------------------------------------------------------
+[SEÇÃO 5 - LOGS E MONITORAMENTO]
+-----------------------------------------------------------
+
+Central de Logs:
+- Elastic Stack
+- Retenção de logs: 180 dias
+
+Eventos monitorados:
+- Falhas de autenticação
+- Escalação de privilégios
+- Execução de comandos privilegiados
+- Alterações em grupos IAM
+- Tráfego suspeito
+
+Exemplo de Evento:
+
+Timestamp: 2026-05-18T14:11:22Z
+Host: srv-prd-api-01
+Evento: AUTH_FAILURE
+Origem: 172.19.11.54
+Resultado: BLOQUEADO
+Ação automática: IP colocado em quarentena temporária
+
+-----------------------------------------------------------
+[SEÇÃO 6 - COMPLIANCE]
+-----------------------------------------------------------
+
+Normas e frameworks adotados:
+- ISO 27001
+- SOC 2 Type II
+- LGPD
+- GDPR
+- NIST CSF
+
+Última auditoria externa:
+Empresa: Orion Compliance Group
+Data: 2026-03-11
+Resultado: CONFORME
+
+Controles auditados:
+- Gestão de acesso
+- Backup e recuperação
+- Criptografia
+- Gestão de incidentes
+- Continuidade de negócios
+
+-----------------------------------------------------------
+[SEÇÃO 7 - DADOS FICTÍCIOS PARA INDEXAÇÃO]
+-----------------------------------------------------------
+
+security-tag: zero-trust
+security-tag: endpoint-protection
+security-tag: cloud-security
+security-tag: iam
+security-tag: siem
+security-tag: waf
+security-tag: kubernetes
+security-tag: devsecops
+security-tag: compliance
+security-tag: lgpd
+security-tag: gdpr
+security-tag: soc2
+security-tag: iso27001
+
+vetor-chave-001: autenticação multifator aplicada em ambientes críticos
+vetor-chave-002: logs centralizados com retenção de 180 dias
+vetor-chave-003: criptografia AES-256 habilitada
+vetor-chave-004: SIEM integrado ao ambiente produtivo
+vetor-chave-005: monitoramento contínuo de vulnerabilidades
+vetor-chave-006: compliance aprovado em auditoria externa
+vetor-chave-007: hardening CIS implementado
+vetor-chave-008: Kubernetes protegido com políticas RBAC
+vetor-chave-009: rotação automática de credenciais
+vetor-chave-010: segmentação de rede aplicada
+
+-----------------------------------------------------------
+[SEÇÃO 8 - OBSERVAÇÃO]
+-----------------------------------------------------------
+
+Este documento é inteiramente fictício e foi criado apenas para fins de:
+- desenvolvimento;
+- testes;
+- treinamento de modelos;
+- indexação vetorial;
+- simulação corporativa.
+
+Nenhuma credencial, IP público, chave secreta ou dado sensível real
+está presente neste conteúdo.
+
+===========================================================
+FIM DO DOCUMENTO
+===========================================================

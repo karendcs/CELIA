@@ -1,0 +1,51 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: celia-ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama:/root/.ollama
+
+  openwebui:
+    image: ghcr.io/open-webui/open-webui:latest
+    container_name: celia-openwebui
+    restart: unless-stopped
+    env_file:
+      - .env          # ← crie o arquivo .env a partir de .env.example (NUNCA comite .env)
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+    ports:
+      - "3000:8080"
+    volumes:
+      - openwebui:/app/backend/data
+    depends_on:
+      - ollama
+    extra_hosts:
+      - "mcp-host:192.168.1.100"
+
+  uploader:
+    build:
+      context: ./wsl
+      dockerfile: Dockerfile.uploader
+    container_name: celia-uploader
+    restart: unless-stopped
+    env_file:
+      - ./wsl/settings.env   # copie de settings.example.env
+    environment:
+      - DOCKER_MODE=1
+      - OLLAMA_URL=http://ollama:11434
+    ports:
+      - "127.0.0.1:8084:8081"
+    volumes:
+      - ./wsl:/app
+      - ./uploads:/uploads
+      - ./knowledge:/knowledge:ro
+    depends_on:
+      - ollama
+    command: ["uvicorn","web_upload:app","--host","0.0.0.0","--port","8081"]
+
+volumes:
+  ollama:
+  openwebui:

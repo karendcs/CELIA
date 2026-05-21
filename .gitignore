@@ -1,0 +1,40 @@
+﻿# ─── Python ───────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ─── Virtual environments ─────────────────────────────────────────────────────
+.env
+.venv/
+env/
+venv/
+ENV/
+
+# ─── Project-specific (generated / runtime / user data) ───────────────────────
+# Arquivos enviados por usuários — não são código-fonte
+uploads/
+
+# Banco de dados vetorial gerado em runtime — não deve ser versionado
+wsl/chroma_store/
+
+# Log de análise gerado localmente
+log-analise.txt
+
+# ─── Variáveis de ambiente / segredos ─────────────────────────────────────────
+# Mantenha apenas o arquivo de exemplo (settings.example.env)
+*.env
+!*.example.env
+
+# ─── IDEs / editores ──────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*~
+
+# ─── Sistema operacional ──────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini

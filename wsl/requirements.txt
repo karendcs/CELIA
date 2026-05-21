@@ -1,0 +1,31 @@
+# ── Servidor web ──────────────────────────────────────────────────────────
+fastapi>=0.111.0
+uvicorn[standard]>=0.30.0
+python-multipart>=0.0.9
+
+# ── Configuração ──────────────────────────────────────────────────────────
+pydantic>=2.7.0
+pydantic-settings>=2.3.0
+python-dotenv>=1.0.0
+
+# ── Dados ─────────────────────────────────────────────────────────────────
+pandas>=2.2.0
+openpyxl>=3.1.0
+
+# ── Banco vetorial ────────────────────────────────────────────────────────
+chromadb==0.5.5
+
+# ── Leitura de documentos ─────────────────────────────────────────────────
+pypdf>=4.2.0
+python-docx>=1.1.0
+
+# ── Embeddings / Reranking ────────────────────────────────────────────────
+sentence-transformers==2.7.0
+torch==2.3.1
+
+# ── HTTP ──────────────────────────────────────────────────────────────────
+requests>=2.32.0
+
+# ── Testes (instalar com: pip install -r requirements.txt -r requirements-dev.txt) ──
+# Ver requirements-dev.txt
+

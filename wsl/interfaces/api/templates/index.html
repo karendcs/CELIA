@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>CelIA - Upload de planilhas</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root {
+      --primary: #0e0e0f;
+      --secondary: #01C3C9;
+      --background: #F5FAFA;
+      --text-dark: #0F172A;
+      --border-radius: 12px;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background-color: var(--background); color: var(--text-dark); }
+    header { background-color: var(--primary); display: flex; justify-content: center; align-items: center; padding: 12px; box-shadow: 0 2px 8px rgba(49, 49, 155, 0.25); }
+    header img { width: 100%; height: 250px; display: block; max-width: 600px; }
+    .card { max-width: 720px; margin: 32px auto; padding: 24px; background: #fff; border-radius: var(--border-radius); box-shadow: 0 6px 18px rgba(0,0,0,.08); }
+    h1 { font-size: 22px; margin-bottom: 12px; color: var(--primary); text-align: center; }
+    label { display: block; margin: 12px 0 6px; font-weight: 600; }
+    input[type="text"], input[type="file"] { width: 100%; max-width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: var(--border-radius); font-size: 15px; display: block; }
+    input[type="file"]::file-selector-button { border: none; padding: 8px 12px; border-radius: 10px; background: var(--primary); color: #fff; cursor: pointer; margin-right: 12px; transition: background 0.3s ease; }
+    input[type="file"]::file-selector-button:hover { background: var(--secondary); }
+    .row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+    .row > * { min-width: 0; }
+    button { background: var(--primary); color: #fff; padding: 12px 16px; font-size: 16px; font-weight: bold; border: none; border-radius: var(--border-radius); cursor: pointer; transition: background 0.3s ease, transform 0.2s ease; width: 100%; }
+    button:hover { background: var(--secondary); transform: scale(1.02); }
+    #status { margin-top: 12px; color: var(--primary); font-weight: bold; text-align: center; white-space: pre-wrap; }
+    .muted { color: #777; font-size: 14px; text-align: center; }
+    pre { background: #0f172a; color: #e2e8f0; padding: 12px; border-radius: var(--border-radius); max-height: 360px; overflow: auto; font-size: 14px; }
+    .link { margin-top: 10px; text-align: center; }
+    .link a { color: var(--primary); text-decoration: none; font-weight: 600; }
+    .link a:hover { color: var(--secondary); text-decoration: underline; }
+    .recent-section { margin-top: 20px; padding: 16px; background: #f8f9fa; border-radius: var(--border-radius); box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+    .recent-section h3 { color: var(--primary); margin-bottom: 8px; }
+    .recent-section ul { padding-left: 20px; margin: 0 0 12px 0; }
+    .recent-section li { margin-bottom: 6px; }
+    .recent-section a { color: var(--secondary); text-decoration: none; font-weight: 600; }
+    .recent-section a:hover { color: var(--primary); text-decoration: underline; }
+    .hidden { display: none; }
+    @media (max-width: 600px) { .row { grid-template-columns: 1fr; } header img { max-width: 280px; } }
+  </style>
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("uploadForm");
+    const statusElem = document.getElementById("status");
+    const liveLog = document.getElementById("liveLog");
+    const liveSection = document.getElementById("live");
+    const resultLink = document.getElementById("resultLink");
+
+    async function refreshRecent() {
+      try {
+        const r = await fetch("/recent.json");
+        if (!r.ok) return;
+        const data = await r.json();
+        const xList = document.getElementById("recent-xlsx");
+        const lList = document.getElementById("recent-logs");
+        if (xList) {
+          xList.innerHTML = data.xlsx && data.xlsx.length
+            ? data.xlsx.map(it => `<li><a href="${it.url}" target="_blank">${it.name}</a></li>`).join("")
+            : "<li><em>Nenhum arquivo disponível.</em></li>";
+        }
+        if (lList) {
+          lList.innerHTML = data.logs && data.logs.length
+            ? data.logs.map(it => `<li><a href="${it.url}" target="_blank">${it.name}</a></li>`).join("")
+            : "<li><em>Nenhum log disponível.</em></li>";
+        }
+      } catch(e) { /* silencioso */ }
+    }
+
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      statusElem.style.color = "#001A22";
+      statusElem.innerText = "⏳ Validando e processando...";
+      liveLog.textContent = "";
+      resultLink.innerHTML = "";
+      if (liveSection) liveSection.classList.remove("hidden");
+      const formData = new FormData(form);
+      try {
+        const response = await fetch("/upload_stream", { method: "POST", body: formData });
+        if (!response.ok) {
+          let msg = "Erro inesperado ao processar.";
+          try { const d = await response.json(); msg = d.detalhe || d.erro || msg; } catch (_) {}
+          statusElem.style.color = "red";
+          statusElem.innerText = msg;
+          return;
+        }
+        statusElem.innerText = "🚀 Processando arquivo...";
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = "";
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          const chunk = decoder.decode(value);
+          buffer += chunk;
+          liveLog.textContent += chunk;
+          liveLog.scrollTop = liveLog.scrollHeight;
+        }
+        const mX = buffer.match(/\[OK\]\s*Baixar planilha:\s*(\/downloads\/\S+)/i);
+        const mL = buffer.match(/\[LOG\]\s*(\/downloads\/\S+)/i);
+        let html = "";
+        if (mX) html += `<a href="${mX[1]}" target="_blank">⬇️ Baixar planilha gerada</a>`;
+        if (mL) html += (html ? " &nbsp;|&nbsp; " : "") + `<a href="${mL[1]}" target="_blank">📝 Abrir log</a>`;
+        if (html) resultLink.innerHTML = html;
+        await refreshRecent();
+        statusElem.innerText = "✅ Processamento concluído. Veja os links de download acima.";
+      } catch (err) {
+        statusElem.style.color = "red";
+        statusElem.innerText = "Erro ao enviar o arquivo.";
+      }
+    });
+
+    refreshRecent();
+  });
+  </script>
+</head>
+<body>
+  <header>
+    <img src="/assets/celia.png" alt="CelIA Logo" />
+  </header>
+  <div class="card">
+    <h1></h1>
+    <form id="uploadForm" method="post" enctype="multipart/form-data">
+      <label>Arquivo .xlsx</label>
+      <input type="file" name="file" accept=".xlsx" required />
+      <div class="row">
+        <div>
+          <label>Nome da aba</label>
+          <input type="text" name="sheet" value="Seguranca" />
+        </div>
+        <div>
+          <label>Coluna de perguntas</label>
+          <input type="text" name="qcol" value="Pergunta" />
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>Coluna de respostas</label>
+          <input type="text" name="acol" value="Resposta" />
+        </div>
+      </div>
+      <div style="margin-top:16px">
+        <button type="submit">🚀 Processar e Gerar Respostas</button>
+      </div>
+      <p class="muted">O arquivo é processado localmente. Nenhum dado sai da sua máquina.</p>
+      <p id="status"></p>
+    </form>
+    <div id="live" class="hidden">
+      <h3>Log em tempo real</h3>
+      <pre id="liveLog"></pre>
+      <div class="link" id="resultLink"></div>
+    </div>
+    <div class="recent-section">
+      <h3>📂 Últimos Arquivos Respondidos</h3>
+      <ul id="recent-xlsx"><li><em>Carregando...</em></li></ul>
+      <h3>📝 Últimos Logs</h3>
+      <ul id="recent-logs"><li><em>Carregando...</em></li></ul>
+    </div>
+  </div>
+</body>
+</html>

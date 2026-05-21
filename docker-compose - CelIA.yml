@@ -1,0 +1,67 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ia-privada-v3-ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama:/root/.ollama
+
+  openwebui:
+    image: ghcr.io/open-webui/open-webui:latest
+    container_name: ia-privada-v3-openwebui
+    restart: unless-stopped
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+    ports:
+      - "3000:8080"
+    volumes:
+      - openwebui:/app/backend/data
+    depends_on:
+      - ollama
+
+  uploader:
+    build:
+      context: ./wsl
+      dockerfile: Dockerfile.uploader
+    container_name: ia-privada-v3-uploader
+    restart: unless-stopped
+    environment:
+      - DOCKER_MODE=1
+      - OLLAMA_URL=http://ollama:11434
+      - MODEL_NAME=llama3.2:3b-instruct-q4_0   # ou llama3.2:3b-instruct-q4_0
+      - EMBED_MODEL=nomic-embed-text
+      - COLLECTION_NAME=knowledge_base_hf
+      - KNOWLEDGE_DIR=/knowledge
+      - VECTOR_DB_DIR=/app/chroma_store
+      - TOP_K=4                                # menos contexto por resposta
+      - MIN_SIM=0.35
+      - USE_LOCAL_EMBEDDINGS=1
+      - HF_EMBED_MODEL=intfloat/multilingual-e5-small   # rápido e bom em PT
+      - MAX_TOKENS=500                          # já limita geração
+      - NUM_CTX=1536
+      - TEMP=0.1
+      - TOP_P=0.9
+      - REPEAT_PENALTY=1.1
+      - ANONTELEMETRY_DISABLED=true      
+      - NUM_THREADS=8
+      - EMBED_BATCH=64
+      - CHROMA_TELEMETRY_ENABLED=false
+      - ANONYMIZED_TELEMETRY=false
+      - RERANKER_MODEL=cross-encoder/ms-marco-MiniLM-L-6-v2
+      - UPLOADER_USER=admin
+      - UPLOADER_PASSWORD=troque123
+    ports:
+      - "127.0.0.1:8084:8081"
+    volumes:
+      - ./wsl:/app
+      - ./uploads:/uploads
+      - ./knowledge:/knowledge:ro
+    depends_on:
+      - ollama
+    command: ["uvicorn","web_upload:app","--host","0.0.0.0","--port","8081"]
+
+volumes:
+  ollama:
+  openwebui:
