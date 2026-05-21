@@ -1,6 +1,6 @@
 ﻿# CelIA
 
-CelIA é um agente de IA local para processar planilhas Excel com RAG usando Ollama e ChromaDB, sem enviar dados para fora da máquina.
+CelIA é uma agente de IA local especializada em responder planilhas Excel de forma inteligente, utilizando arquitetura RAG (Retrieval-Augmented Generation) com Ollama e ChromaDB. A solução processa os dados diretamente na máquina local, sem enviar informações para serviços externos, garantindo maior privacidade, segurança e controle dos dados corporativos.
 
 ## Índice
 
