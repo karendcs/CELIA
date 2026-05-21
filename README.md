@@ -1,6 +1,6 @@
 ﻿# CelIA
 
-CelIA é uma agente de IA local especializada em responder planilhas Excel de forma inteligente, utilizando arquitetura RAG (Retrieval-Augmented Generation) com Ollama e ChromaDB. A solução processa os dados diretamente na máquina local, sem enviar informações para serviços externos, garantindo maior privacidade, segurança e controle dos dados corporativos.
+CelIA é uma agente de IA local especializada em responder planilhas Excel de forma inteligente, utilizando arquitetura RAG (Retrieval-Augmented Generation) com Ollama e ChromaDB. A solução processa os dados diretamente na máquina local, sem enviar informações para serviços externos, garantindo maior privacidade, segurança e controle dos dados.
 
 ## Índice
 
@@ -53,7 +53,7 @@ cp wsl/settings.example.env wsl/settings.env
 1. No terminal WSL, vá para o diretório do projeto:
 
 ```bash
-cd /mnt/c/Karen/Poc-CelIA/CelIA
+cd /mnt/c/Usuario/CelIA
 ```
 
 2. Baixe a imagem do Ollama:
@@ -95,7 +95,7 @@ docker compose exec uploader python excel_rag.py ingest --dir /knowledge
 1. Entre em `wsl`:
 
 ```bash
-cd /mnt/c/Karen/Poc-CelIA/CelIA/wsl
+cd /mnt/c/Usuario/CelIA/wsl
 ```
 
 2. Crie e ative um ambiente virtual:
