@@ -40,6 +40,7 @@ services:
       - "127.0.0.1:8084:8081"
     volumes:
       - ./wsl:/app
+      - ./assets:/app/assets:ro
       - ./uploads:/uploads
       - ./knowledge:/knowledge:ro
     depends_on:
