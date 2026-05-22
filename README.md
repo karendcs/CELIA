@@ -6,6 +6,7 @@ CelIA é uma agente de IA local especializada em responder planilhas Excel de fo
 
 - [Requisitos](#requisitos)
 - [Configuração mínima](#configuração-mínima)
+- [Interface principal](#interface-principal)
 - [Executar com Docker (recomendado)](#executar-com-docker-recomendado)
 - [URLs locais](#urls-locais)
 - [Executar sem Docker (opcional)](#executar-sem-docker-opcional)
@@ -45,6 +46,20 @@ cp wsl/settings.example.env wsl/settings.env
 
 - `USE_LOCAL_EMBEDDINGS=1` → embeddings locais com HuggingFace
 - `USE_LOCAL_EMBEDDINGS=0` → embeddings via Ollama
+
+---
+
+## Interface principal
+
+![Interface principal da CelIA](assets/celia-interface.png)
+
+A interface principal da aplicação é a API local do uploader, que expõe o serviço web para ingestão e consulta de planilhas Excel.
+
+A CELIA responde perguntas sobre a planilha com base nos dados armazenados no banco vetorial ChromaDB. Para que ela possa responder corretamente, é necessário informar:
+
+- a coluna da pergunta
+- a coluna da resposta
+- a aba (sheet) da planilha que será verificada
 
 ---
 
