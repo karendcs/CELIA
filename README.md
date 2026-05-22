@@ -49,6 +49,13 @@ cp wsl/settings.example.env wsl/settings.env
 
 ---
 
+Antes de acessar a interface da CelIA, será exibida uma tela de login. O usuário precisará informar as credenciais configuradas nas variáveis de ambiente (arquivo `wsl/settings.env`):
+
+- `UPLOADER_USER=admin`
+- `UPLOADER_PASSWORD=<senha-forte-aqui>`
+
+No futuro a ideia é evoluir esse mecanismo para um controle de acesso mais robusto ao sistema.
+
 ## Interface principal
 
 ![Interface principal da CelIA](assets/celia-interface.png)
